@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="medicineDao" class="com.medical.DAO.MedicineDAO"
+		p:jdbcTemplate-ref="jdbcTemplate">
+	</bean>
+	<bean id="shop" class="com.medical.Shop.ShopOperations">
+		<property name="medicineDAO" ref="medicineDao"></property>
+		<property name="pharmacyDAO" ref="pharmacyDAO"></property>
+		<property name="orderOperation" ref="orderOperations"></property>
+	</bean>
+
+	<bean id="pharmacyDAO" class="com.medical.DAO.PharmacyDAO"
+		p:jdbcTemplate-ref="jdbcTemplate">
+	</bean>
+
+	<bean id="doctorOp" class="com.medical.Shop.DoctorOperations">
+		<property name="doctorDAO" ref="doctorDao"></property>
+	</bean>
+	<bean id="doctorDao" class="com.medical.DAO.DoctorDAO"
+		p:jdbcTemplate-ref="jdbcTemplate">
+		<property name="dataSource" ref="ds"></property>
+	</bean>
+
+	<bean id="orderOperations"
+		class="com.medical.Shop.OrderOperations">
+		<property name="shop" ref="shop"></property>
+		<property name="orderDAO" ref="orderDAO"></property>
+		<property name="medicineDAO" ref="medicineDao"></property>
+		<property name="pharmacyDAO" ref="pharmacyDAO"></property>
+	</bean>
+	<bean id="orderDAO" class="com.medical.DAO.OrderDAO"
+		p:jdbcTemplate-ref="jdbcTemplate">
+	</bean>
+
+	<bean name="ds"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/swapnil" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean name="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="ds" />
+		</property>
+	</bean>
+
+
+
+	<context:property-placeholder
+		location="classpath:/pharmacy.properties" />
+	<bean id="pharmacyProperties"
+		class="com.medical.Pharmacy.PharmacyProperties">
+		<property name="name" value="${name}" />
+		<property name="lic_no" value="${lic_no}" />
+		<property name="address" value="${address}" />
+		<property name="contact" value="${contact}" />
+	</bean>
+
+
+</beans>
