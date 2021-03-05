@@ -74,7 +74,7 @@ public class Menu {
 				key = sc.nextInt();
 				sc.nextLine();
 			} while (key != 0);
-			doctorOp.showAllDoctors();
+			//doctorOp.showAllDoctors();
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
